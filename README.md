@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🤖 AI Code Explainer
 
 A smart web-based code analysis tool that explains your code line-by-line with visual insights.
@@ -123,3 +124,7 @@ Have questions? Feel free to reach out!
 ---
 
 Made with ❤️ by [Your Name]
+=======
+# code-explainer
+AI-powered code analysis tool with line-by-line explanations
+>>>>>>> fd46c52ce8bbf32fb357a61fffac9d443664f98c
