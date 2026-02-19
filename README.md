@@ -93,7 +93,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Krishna**
 - GitHub: [@Krishna81500](https://github.com/Krishna81500)
-- LinkedIn: [Krishna](https://linkedin.com/in/krishna)
+- LinkedIn: [Krishnajith T](https://www.linkedin.com/in/krishnajith-t-586166357)
 
 ## 🌟 Show Your Support
 
