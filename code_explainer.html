@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Explainer - AI Powered</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .result-content {
+            line-height: 1.8;
+            color: #333;
+            white-space: pre-wrap;
+        }
+        .loading {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            display: none;
+        }
+        .error {
+            background: #fee;
+            border-left-color: #f44;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Code Explainer</h1>
+        <p class="subtitle">Powered by Google Gemini AI</p>
+
+        <div class="input-group">
+            <label for="language">Programming Language</label>
+            <select id="language">
+                <option value="Python">Python</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Java">Java</option>
+                <option value="C++">C++</option>
+                <option value="C#">C#</option>
+                <option value="PHP">PHP</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Go">Go</option>
+                <option value="Kotlin">Kotlin</option>
+                <option value="Swift">Swift</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="code">Paste Your Code</label>
+            <textarea id="code" placeholder="Paste your code here..."></textarea>
+        </div>
+
+        <button id="explainBtn" onclick="explainCode()">Explain Code</button>
+
+        <div class="loading" id="loading">⏳ Analyzing your code...</div>
+
+        <div class="result" id="result">
+            <h2>📝 Explanation</h2>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyA29Y164lp8KZGksWkzrUE6LCrh-_kf5Xo';
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+
+        async function explainCode() {
+            const language = document.getElementById('language').value;
+            const code = document.getElementById('code').value.trim();
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            const loading = document.getElementById('loading');
+            const btn = document.getElementById('explainBtn');
+
+            if (!code) {
+                alert('Please paste some code first!');
+                return;
+            }
+
+            // Show loading
+            loading.style.display = 'block';
+            resultDiv.style.display = 'none';
+            btn.disabled = true;
+
+            const prompt = `Explain the following ${language} code in simple terms:
+
+\`\`\`${language}
+${code}
+\`\`\`
+
+Provide:
+1. What the code does (overview)
+2. Line-by-line explanation
+3. Key concepts used
+4. Potential improvements`;
+
+            const payload = {
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload),
+                    mode: 'cors'
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.candidates && data.candidates[0]) {
+                    const explanation = data.candidates[0].content.parts[0].text;
+                    resultContent.textContent = explanation;
+                    resultDiv.classList.remove('error');
+                } else {
+                    throw new Error(data.error?.message || 'API Error: ' + JSON.stringify(data));
+                }
+
+            } catch (error) {
+                resultContent.textContent = `Error: ${error.message}\n\nPlease check your internet connection or try again.`;
+                resultDiv.classList.add('error');
+            } finally {
+                loading.style.display = 'none';
+                resultDiv.style.display = 'block';
+                btn.disabled = false;
+            }
+        }
+
+        // Allow Enter key in textarea
+        document.getElementById('code').addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + '    ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 4;
+            }
+        });
+    </script>
+</body>
+</html>

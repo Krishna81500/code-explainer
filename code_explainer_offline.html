@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Explainer - AI Powered</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .result-content {
+            line-height: 1.8;
+            color: #333;
+        }
+        .code-line {
+            background: #f0f0f0;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Code Explainer</h1>
+        <p class="subtitle">Smart Code Analysis Tool</p>
+
+        <div class="input-group">
+            <label for="language">Programming Language</label>
+            <select id="language">
+                <option value="Python">Python</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Java">Java</option>
+                <option value="C++">C++</option>
+                <option value="C#">C#</option>
+                <option value="PHP">PHP</option>
+                <option value="Ruby">Ruby</option>
+                <option value="Go">Go</option>
+                <option value="Kotlin">Kotlin</option>
+                <option value="Swift">Swift</option>
+                <option value="TypeScript">TypeScript</option>
+                <option value="Rust">Rust</option>
+                <option value="C">C</option>
+                <option value="SQL">SQL</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="code">Paste Your Code</label>
+            <textarea id="code" placeholder="Paste your code here..."></textarea>
+        </div>
+
+        <button onclick="explainCode()">Explain Code</button>
+
+        <div class="result" id="result">
+            <h2>📝 Explanation</h2>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function explainCode() {
+            const language = document.getElementById('language').value;
+            const code = document.getElementById('code').value.trim();
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+
+            if (!code) {
+                alert('Please paste some code first!');
+                return;
+            }
+
+            const lines = code.split('\n');
+            let explanation = `<h3>📊 Code Overview (${language})</h3>`;
+            explanation += `<p><strong>Total Lines:</strong> ${lines.length}</p>`;
+            explanation += `<p><strong>Language:</strong> ${language}</p><br>`;
+            
+            explanation += `<h3>🔍 Line-by-Line Analysis:</h3>`;
+            
+            lines.forEach((line, index) => {
+                if (line.trim()) {
+                    const lineExplanation = analyzeLine(line, language);
+                    explanation += `<div class="code-line">`;
+                    explanation += `<strong>Line ${index + 1}:</strong> <code>${escapeHtml(line)}</code><br>`;
+                    explanation += `<em>${lineExplanation}</em>`;
+                    explanation += `</div>`;
+                }
+            });
+
+            explanation += `<br><h3>💡 Key Concepts:</h3>`;
+            explanation += getKeyConcepts(code, language);
+
+            resultContent.innerHTML = explanation;
+            resultDiv.style.display = 'block';
+        }
+
+        function analyzeLine(line, language) {
+            line = line.trim();
+            
+            // Common patterns
+            if (line.startsWith('def ') || line.startsWith('function ')) {
+                return '✅ Function definition - Creates a reusable block of code';
+            }
+            if (line.includes('import ') || line.includes('require(')) {
+                return '📦 Import statement - Brings in external libraries/modules';
+            }
+            if (line.includes('class ')) {
+                return '🏗️ Class definition - Defines a blueprint for objects';
+            }
+            if (line.includes('if ') || line.includes('if(')) {
+                return '🔀 Conditional statement - Executes code based on a condition';
+            }
+            if (line.includes('for ') || line.includes('while ')) {
+                return '🔄 Loop - Repeats code multiple times';
+            }
+            if (line.includes('return ')) {
+                return '↩️ Return statement - Sends a value back from a function';
+            }
+            if (line.includes('print(') || line.includes('console.log')) {
+                return '🖨️ Output statement - Displays information to the user';
+            }
+            if (line.includes('=') && !line.includes('==')) {
+                return '📝 Variable assignment - Stores a value in memory';
+            }
+            if (line.startsWith('//') || line.startsWith('#')) {
+                return '💬 Comment - Explains code for humans, ignored by computer';
+            }
+            
+            return '📄 Code statement - Performs an operation';
+        }
+
+        function getKeyConcepts(code, language) {
+            let concepts = '<ul>';
+            
+            if (code.includes('def ') || code.includes('function ')) {
+                concepts += '<li>✅ <strong>Functions:</strong> Reusable code blocks</li>';
+            }
+            if (code.includes('class ')) {
+                concepts += '<li>🏗️ <strong>Classes:</strong> Object-oriented programming</li>';
+            }
+            if (code.includes('if ') || code.includes('else')) {
+                concepts += '<li>🔀 <strong>Conditionals:</strong> Decision making in code</li>';
+            }
+            if (code.includes('for ') || code.includes('while ')) {
+                concepts += '<li>🔄 <strong>Loops:</strong> Repetition and iteration</li>';
+            }
+            if (code.includes('import ') || code.includes('require')) {
+                concepts += '<li>📦 <strong>Modules:</strong> Code organization and reuse</li>';
+            }
+            
+            concepts += '</ul>';
+            return concepts;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>
