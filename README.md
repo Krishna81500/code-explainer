@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🤖 AI Code Explainer
 
 A smart web-based code analysis tool that explains your code line-by-line with visual insights.
@@ -19,7 +18,7 @@ A smart web-based code analysis tool that explains your code line-by-line with v
 
 ## 🚀 Demo
 
-Simply open `code_explainer_offline.html` in your browser and start analyzing code!
+Visit: https://krishna81500.github.io/code-explainer/
 
 ## 📋 Supported Languages
 
@@ -42,13 +41,13 @@ Simply open `code_explainer_offline.html` in your browser and start analyzing co
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/code-explainer.git
+git clone https://github.com/Krishna81500/code-explainer.git
 ```
 
 2. Open the file:
 ```bash
 cd code-explainer
-open code_explainer_offline.html
+open index.html
 ```
 
 That's it! No dependencies needed.
@@ -60,18 +59,10 @@ That's it! No dependencies needed.
 3. Click "Explain Code"
 4. Get instant line-by-line analysis!
 
-## 📸 Screenshots
-
-### Main Interface
-Beautiful gradient UI with code input area
-
-### Analysis Results
-Detailed explanations with syntax highlighting
-
 ## 🎯 Use Cases
 
 - 📚 **Learning** - Understand code snippets while studying
-- 👨‍🏫 **Teaching** - Explain code to students
+- 👨🏫 **Teaching** - Explain code to students
 - 🔍 **Code Review** - Quick analysis of code structure
 - 📖 **Documentation** - Generate code explanations
 
@@ -79,7 +70,7 @@ Detailed explanations with syntax highlighting
 
 ```
 code-explainer/
-├── code_explainer_offline.html    # Main application
+├── index.html                      # Main application
 ├── README.md                       # Documentation
 └── LICENSE                         # MIT License
 ```
@@ -98,11 +89,11 @@ Contributions are welcome! Feel free to:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## 👨💻 Author
 
-**Your Name**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [Your Profile](https://linkedin.com/in/YOUR_PROFILE)
+**Krishna**
+- GitHub: [@Krishna81500](https://github.com/Krishna81500)
+- LinkedIn: [Krishna](https://linkedin.com/in/krishna)
 
 ## 🌟 Show Your Support
 
@@ -123,8 +114,4 @@ Have questions? Feel free to reach out!
 
 ---
 
-Made with ❤️ by [Your Name]
-=======
-# code-explainer
-AI-powered code analysis tool with line-by-line explanations
->>>>>>> fd46c52ce8bbf32fb357a61fffac9d443664f98c
+Made with ❤️ by Krishna
