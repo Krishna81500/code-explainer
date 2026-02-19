@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Email Writer - Professional Email Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .email-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-family: 'Arial', sans-serif;
+        }
+        .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        .action-btn {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .action-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✉️ AI Email Writer</h1>
+        <p class="subtitle">Generate professional emails instantly</p>
+
+        <div class="form-group">
+            <label for="emailType">Email Type</label>
+            <select id="emailType">
+                <option value="professional">Professional/Business</option>
+                <option value="job_application">Job Application</option>
+                <option value="follow_up">Follow-up</option>
+                <option value="thank_you">Thank You</option>
+                <option value="apology">Apology</option>
+                <option value="request">Request</option>
+                <option value="introduction">Introduction</option>
+                <option value="resignation">Resignation</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient">Recipient Name</label>
+            <input type="text" id="recipient" placeholder="e.g., John Smith">
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Email Subject/Purpose</label>
+            <input type="text" id="subject" placeholder="e.g., Meeting Request for Project Discussion">
+        </div>
+
+        <div class="form-group">
+            <label for="details">Key Points/Details (one per line for bullet points)</label>
+            <textarea id="details" placeholder="Enter main points you want to include:\n- Point 1\n- Point 2\n- Point 3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="tone">Tone</label>
+            <select id="tone">
+                <option value="formal">Formal</option>
+                <option value="professional">Professional</option>
+                <option value="friendly">Friendly</option>
+                <option value="casual">Casual</option>
+            </select>
+        </div>
+
+        <button class="btn" onclick="generateEmail()">Generate Email</button>
+
+        <div class="result" id="result">
+            <h2>📧 Generated Email</h2>
+            <div class="email-content" id="emailContent"></div>
+            <div class="actions">
+                <button class="action-btn" onclick="copyEmail()">📋 Copy</button>
+                <button class="action-btn" onclick="generateEmail()">🔄 Regenerate</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateEmail() {
+            const emailType = document.getElementById('emailType').value;
+            const recipient = document.getElementById('recipient').value.trim() || 'Recipient';
+            const subject = document.getElementById('subject').value.trim();
+            const details = document.getElementById('details').value.trim();
+            const tone = document.getElementById('tone').value;
+
+            if (!subject || !details) {
+                alert('Please fill in subject and details!');
+                return;
+            }
+
+            const email = createEmail(emailType, recipient, subject, details, tone);
+            
+            document.getElementById('emailContent').textContent = email;
+            document.getElementById('result').style.display = 'block';
+        }
+
+        function createEmail(type, recipient, subject, details, tone) {
+            const greetings = {
+                formal: `Dear ${recipient},`,
+                professional: `Hello ${recipient},`,
+                friendly: `Hi ${recipient},`,
+                casual: `Hey ${recipient},`
+            };
+
+            const closings = {
+                formal: 'Sincerely,\nYour Name',
+                professional: 'Best regards,\nYour Name',
+                friendly: 'Warm regards,\nYour Name',
+                casual: 'Thanks,\nYour Name'
+            };
+
+            // Enhance subject if it's just one word
+            let enhancedSubject = subject;
+            if (subject.split(' ').length === 1) {
+                const subjectEnhancements = {
+                    'leave': 'Leave Application Request',
+                    'meeting': 'Meeting Request',
+                    'resignation': 'Resignation Notice',
+                    'apology': 'Sincere Apology',
+                    'request': 'Request for Assistance',
+                    'update': 'Project Update',
+                    'inquiry': 'Inquiry Regarding',
+                    'feedback': 'Feedback Request',
+                    'proposal': 'Proposal Submission'
+                };
+                enhancedSubject = subjectEnhancements[subject.toLowerCase()] || `Regarding ${subject.charAt(0).toUpperCase() + subject.slice(1)}`;
+            }
+
+            // Enhance details if too short
+            let enhancedDetails = details;
+            const words = details.trim().split(/\s+/);
+            
+            if (words.length <= 3) {
+                const detailEnhancements = {
+                    'fever': 'I am writing to inform you that I am unwell and suffering from fever. I would like to request a leave of absence to recover.',
+                    'sick': 'I am not feeling well today and need to take a sick leave to rest and recover.',
+                    'emergency': 'I have an urgent personal emergency that requires my immediate attention.',
+                    'meeting': 'I would like to schedule a meeting to discuss important matters at your earliest convenience.',
+                    'urgent': 'This is an urgent matter that requires immediate attention and action.',
+                    'help': 'I need your assistance and guidance on an important matter.',
+                    'thanks': 'I wanted to express my sincere gratitude for your support and assistance.',
+                    'sorry': 'I sincerely apologize for any inconvenience caused and take full responsibility.'
+                };
+                
+                const keyword = words[0].toLowerCase();
+                if (detailEnhancements[keyword]) {
+                    enhancedDetails = detailEnhancements[keyword];
+                } else {
+                    enhancedDetails = `I am writing to inform you about ${details}. I would appreciate your understanding and support in this matter.`;
+                }
+            }
+
+            // Split details into points
+            const points = enhancedDetails.split('\n').filter(p => p.trim());
+            let bodyContent = '';
+
+            if (points.length > 1) {
+                bodyContent = points.map(point => `• ${point.trim()}`).join('\n');
+            } else {
+                bodyContent = enhancedDetails;
+            }
+
+            const templates = {
+                professional: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI hope this email finds you well.\n\n${bodyContent}\n\nI look forward to your response.\n\n${closings[tone]}`,
+
+                job_application: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI am writing to express my interest in the position mentioned in the subject line.\n\n${bodyContent}\n\nI have attached my resume for your review. I would welcome the opportunity to discuss how my skills and experience align with your needs.\n\nThank you for considering my application.\n\n${closings[tone]}`,
+
+                follow_up: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI wanted to follow up on my previous email regarding the matter mentioned above.\n\n${bodyContent}\n\nI would appreciate any update you can provide at your earliest convenience.\n\n${closings[tone]}`,
+
+                thank_you: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI wanted to take a moment to express my sincere gratitude.\n\n${bodyContent}\n\nThank you once again for your time and consideration.\n\n${closings[tone]}`,
+
+                apology: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI am writing to sincerely apologize for the situation.\n\n${bodyContent}\n\nI take full responsibility and will ensure this does not happen again. Thank you for your understanding.\n\n${closings[tone]}`,
+
+                request: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI am reaching out to request your assistance with the following matter:\n\n${bodyContent}\n\nI would greatly appreciate your help with this. Please let me know if you need any additional information.\n\n${closings[tone]}`,
+
+                introduction: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI hope this email finds you well. Allow me to introduce myself.\n\n${bodyContent}\n\nI look forward to connecting with you and exploring potential opportunities for collaboration.\n\n${closings[tone]}`,
+
+                resignation: `Subject: ${enhancedSubject}\n\n${greetings[tone]}\n\nI am writing to formally notify you of my resignation from my position.\n\n${bodyContent}\n\nI am committed to ensuring a smooth transition and will do everything possible to hand over my responsibilities effectively.\n\nThank you for the opportunities and experiences during my time here.\n\n${closings[tone]}`
+            };
+
+            return templates[type] || templates.professional;
+        }
+
+        function copyEmail() {
+            const emailContent = document.getElementById('emailContent').textContent;
+            navigator.clipboard.writeText(emailContent).then(() => {
+                alert('✅ Email copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
